@@ -13,7 +13,6 @@ if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['passwor
     $pass  = $_POST['password'];
     $pass2 = $_POST['password2'];
 
-    // التحقق من البيانات
     if (strlen($user) < 1 || strlen($email) < 1 || strlen($pass) < 1) {
         $_SESSION['error'] = "All fields are required";
         header("Location: register.php");
@@ -35,7 +34,6 @@ if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['passwor
         return;
     }
 
-    // نتأكد انو الاسم او الايميل مو مستخدمين قبل
     $stmt = $pdo->prepare("SELECT id FROM users WHERE username = :u OR email = :e");
     $stmt->execute(array(':u' => $user, ':e' => $email));
     if ($stmt->fetch(PDO::FETCH_ASSOC) !== false) {
@@ -44,7 +42,6 @@ if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['passwor
         return;
     }
 
-    // تشفير كلمة السر قبل التخزين
     $hash = password_hash($pass, PASSWORD_DEFAULT);
 
     $stmt = $pdo->prepare("INSERT INTO users (username, email, password) VALUES (:u, :e, :p)");

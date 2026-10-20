@@ -1,6 +1,5 @@
 <?php
 session_start();
-// نحذف كل متغيرات الجلسة وننهيها (الفصل السابع)
 session_unset();
 session_destroy();
 

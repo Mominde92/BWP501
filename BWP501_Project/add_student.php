@@ -5,7 +5,6 @@ require_once "student_validation.php";
 require_once "upload_image.php";
 
 if (isset($_POST['name']) && isset($_POST['email'])) {
-    // تحقق من جهة المخدم كمان (لو المستخدم عطل الجافاسكربت)
     $errors = validate_student($pdo, $_POST);
     if (count($errors) > 0) {
         $_SESSION['error'] = implode(" - ", $errors);
@@ -13,7 +12,6 @@ if (isset($_POST['name']) && isset($_POST['email'])) {
         return;
     }
 
-    // الصورة اختيارية
     $picture = null;
     if (isset($_FILES['picture']) && $_FILES['picture']['name'] != "") {
         $result = upload_image($_FILES['picture']);

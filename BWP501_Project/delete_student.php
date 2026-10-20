@@ -2,13 +2,11 @@
 require_once "pdo.php";
 require_once "check_login.php";
 
-// الحذف الفعلي بيصير بس بعد التأكيد (POST)
 if (isset($_POST['delete']) && isset($_POST['id'])) {
     $stmt = $pdo->prepare("SELECT profile_picture FROM students WHERE id = :id");
     $stmt->execute(array(':id' => $_POST['id']));
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // منحذف صورة الطالب من السيرفر كمان
     if ($row !== false && $row['profile_picture'] != "" && file_exists($row['profile_picture'])) {
         unlink($row['profile_picture']);
     }
@@ -20,7 +18,6 @@ if (isset($_POST['delete']) && isset($_POST['id'])) {
     return;
 }
 
-// Guardian
 if (!isset($_GET['id'])) {
     $_SESSION['error'] = "Missing student id";
     header("Location: view_students.php");

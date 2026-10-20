@@ -1,9 +1,5 @@
--- قاعدة بيانات مشروع BWP501
--- نفذ هذا الملف من phpMyAdmin (تبويب SQL) او Import
 
 
-
--- جدول المستخدمين (لتسجيل الدخول)
 CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(100) NOT NULL UNIQUE,
@@ -12,7 +8,6 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- جدول الطلاب
 CREATE TABLE IF NOT EXISTS students (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
@@ -23,7 +18,6 @@ CREATE TABLE IF NOT EXISTS students (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- بيانات تجريبية
 INSERT INTO students (name, email, phone, address) VALUES
 ('Ahmad Khaled', 'ahmad@test.com', '0933111222', 'Damascus - Mazzeh'),
 ('Sara Haddad', 'sara@test.com', '0944555666', 'Aleppo'),

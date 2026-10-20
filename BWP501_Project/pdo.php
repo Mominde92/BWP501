@@ -1,6 +1,4 @@
 <?php
-// ملف الاتصال مع قاعدة البيانات (نفس فكرة الفصل الثامن)
-// عند الرفع على الاستضافة نغير هذه القيم فقط
 $servername = "localhost";
 $dbname     = "student_registration_system";
 $username   = "root";

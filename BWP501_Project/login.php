@@ -2,7 +2,6 @@
 require_once "pdo.php";
 session_start();
 
-// اذا مسجل دخول اصلا ما في داعي يشوف صفحة الدخول
 if (isset($_SESSION['user_id'])) {
     header("Location: index.php");
     return;
@@ -18,7 +17,6 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
         return;
     }
 
-    // المستخدم يقدر يدخل بالاسم او بالايميل
     $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :l OR email = :l2");
     $stmt->execute(array(':l' => $login, ':l2' => $login));
     $row = $stmt->fetch(PDO::FETCH_ASSOC);

@@ -1,6 +1,4 @@
 <?php
-// دالة التحقق من بيانات الطالب
-// نستخدمها بمكانين: validate.php (للـ AJAX) و add/update (تحقق من جهة المخدم كمان)
 function validate_student($pdo, $data, $id = 0)
 {
     $errors = array();
@@ -21,7 +19,6 @@ function validate_student($pdo, $data, $id = 0)
     } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = "Invalid email format";
     } else {
-        // نتأكد انو الايميل مو مسجل لطالب تاني
         $stmt = $pdo->prepare("SELECT id FROM students WHERE email = :e AND id != :id");
         $stmt->execute(array(':e' => $email, ':id' => $id));
         if ($stmt->fetch(PDO::FETCH_ASSOC) !== false) {

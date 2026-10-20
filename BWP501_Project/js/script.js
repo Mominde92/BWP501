@@ -1,6 +1,3 @@
-// التحقق من فورم الطالب باستخدام AJAX (بدون اعادة تحميل الصفحة)
-// نفس طريقة XMLHttpRequest يلي اخدناها بالفصل العاشر
-
 var studentForm = document.getElementById("studentForm");
 
 function showErrors(errors) {
@@ -20,10 +17,8 @@ function showErrors(errors) {
     }
 }
 
-// submitAfter = true يعني اذا ما في اخطاء نبعت الفورم
 function validateStudent(submitAfter) {
     var data = new FormData();
-    // استخدمنا elements لان studentForm.name بترجع اسم الفورم نفسه مو الحقل
     var f = studentForm.elements;
     data.append("name", f["name"].value);
     data.append("email", f["email"].value);
@@ -52,7 +47,6 @@ function validateStudent(submitAfter) {
 }
 
 if (studentForm) {
-    // التحقق اثناء الكتابة
     var inputs = studentForm.querySelectorAll(".check");
     for (var i = 0; i < inputs.length; i++) {
         inputs[i].addEventListener("blur", function () {
@@ -65,7 +59,6 @@ if (studentForm) {
         validateStudent(true);
     });
 
-    // معاينة الصورة قبل الرفع
     var pic = document.getElementById("picture");
     pic.addEventListener("change", function () {
         if (this.files && this.files[0]) {
@@ -78,7 +71,6 @@ if (studentForm) {
     });
 }
 
-// التأكد من تطابق كلمتي السر بصفحة التسجيل
 var registerForm = document.getElementById("registerForm");
 if (registerForm) {
     registerForm.addEventListener("submit", function (e) {

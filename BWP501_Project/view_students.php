@@ -4,15 +4,12 @@ require_once "check_login.php";
 
 $per_page = 10;
 
-// البحث
 $q = isset($_GET['q']) ? trim($_GET['q']) : "";
 
-// الترتيب - ما منحط اسم العمود بالاستعلام الا اذا كان من القائمة المسموحة
 $allowed = array('id', 'name', 'email', 'phone', 'created_at');
 $sort  = (isset($_GET['sort']) && in_array($_GET['sort'], $allowed)) ? $_GET['sort'] : 'id';
 $order = (isset($_GET['order']) && $_GET['order'] == 'asc') ? 'ASC' : 'DESC';
 
-// رقم الصفحة
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 if ($page < 1) $page = 1;
 
@@ -23,7 +20,6 @@ if ($q != "") {
     $params = array(':q1' => "%$q%", ':q2' => "%$q%", ':q3' => "%$q%");
 }
 
-// عدد الطلاب الكلي (لحساب عدد الصفحات)
 $stmt = $pdo->prepare("SELECT COUNT(*) FROM students $where");
 $stmt->execute($params);
 $total = $stmt->fetchColumn();
@@ -40,7 +36,6 @@ $stmt->bindValue(':off', $offset, PDO::PARAM_INT);
 $stmt->execute();
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// دالة صغيرة لبناء الروابط مع الحفاظ على البحث والترتيب
 function link_to($page, $sort, $order, $q)
 {
     return "view_students.php?" . http_build_query(array(
@@ -48,7 +43,6 @@ function link_to($page, $sort, $order, $q)
     ));
 }
 
-// رابط عمود الترتيب: اذا ضغطنا على نفس العمود منعكس الاتجاه
 function sort_link($col, $label, $sort, $order, $q)
 {
     $new_order = ($sort == $col && $order == 'ASC') ? 'DESC' : 'ASC';
@@ -131,7 +125,6 @@ $to   = min($offset + $per_page, $total);
     </table>
     </div>
 
-    <!-- Pagination -->
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 p-3 border-top">
         <small class="text-muted">Showing <?= $from ?> - <?= $to ?> of <?= $total ?></small>
         <ul class="pagination pagination-sm mb-0 flex-wrap">

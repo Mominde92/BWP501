@@ -14,13 +14,11 @@ if (isset($_POST['name']) && isset($_POST['id'])) {
         return;
     }
 
-    // نجيب الصورة القديمة
     $stmt = $pdo->prepare("SELECT profile_picture FROM students WHERE id = :id");
     $stmt->execute(array(':id' => $id));
     $old = $stmt->fetch(PDO::FETCH_ASSOC);
     $picture = ($old !== false) ? $old['profile_picture'] : null;
 
-    // اذا اختار صورة جديدة منرفعها ومنحذف القديمة
     if (isset($_FILES['picture']) && $_FILES['picture']['name'] != "") {
         $result = upload_image($_FILES['picture']);
         if (!$result['ok']) {
@@ -52,7 +50,6 @@ if (isset($_POST['name']) && isset($_POST['id'])) {
     return;
 }
 
-// Guardian: لازم يكون في id
 if (!isset($_GET['id'])) {
     $_SESSION['error'] = "Missing student id";
     header("Location: view_students.php");
