@@ -1,6 +1,6 @@
 <?php
 require_once "pdo.php";
-session_start();
+require_once "session.php";
 
 if (isset($_SESSION['user_id'])) {
     $total_students = $pdo->query("SELECT COUNT(*) FROM students")->fetchColumn();

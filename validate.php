@@ -1,7 +1,7 @@
 <?php
 require_once "pdo.php";
 require_once "student_validation.php";
-session_start();
+require_once "session.php";
 
 header("Content-Type: application/json");
 

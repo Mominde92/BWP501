@@ -1,6 +1,6 @@
 <?php
 require_once "pdo.php";
-session_start();
+require_once "session.php";
 
 if (isset($_SESSION['user_id'])) {
     header("Location: index.php");
@@ -22,10 +22,8 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user !== false && password_verify($password, $user['password'])) {
-        session_regenerate_id(true);
-        $_SESSION['user_id']  = $user['id'];
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['success']  = "Welcome back " . $user['username'];
+        login_user($user);
+        $_SESSION['success'] = "Welcome back " . $user['username'];
         header("Location: index.php");
         return;
     } else {

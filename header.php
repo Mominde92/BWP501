@@ -1,7 +1,5 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+require_once "session.php";
 $logged  = isset($_SESSION['user_id']);
 $current = basename($_SERVER['PHP_SELF']);
 
