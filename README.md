@@ -2,7 +2,7 @@
 
 مشروع مادة برمجة الويب (2) - نظام تسجيل الطلاب باستخدام HTML, CSS, JavaScript, Bootstrap 5, PHP, MySQL.
 
-**رابط الاستضافة:** https://moumen-dev.com/test/
+**رابط الاستضافة:** https://moumen-dev.com/BWP501_HW
 
 ---
 
