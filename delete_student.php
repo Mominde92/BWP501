@@ -5,14 +5,14 @@ require_once "check_login.php";
 if (isset($_POST['delete']) && isset($_POST['id'])) {
     $stmt = $pdo->prepare("SELECT profile_picture FROM students WHERE id = :id");
     $stmt->execute(array(':id' => $_POST['id']));
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $student = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($row !== false && $row['profile_picture'] != "" && file_exists($row['profile_picture'])) {
-        unlink($row['profile_picture']);
+    if ($student !== false && $student['profile_picture'] != "" && file_exists($student['profile_picture'])) {
+        unlink($student['profile_picture']);
     }
 
-    $stmt = $pdo->prepare("DELETE FROM students WHERE id = :zip");
-    $stmt->execute(array(':zip' => $_POST['id']));
+    $stmt = $pdo->prepare("DELETE FROM students WHERE id = :id");
+    $stmt->execute(array(':id' => $_POST['id']));
     $_SESSION['success'] = "Student deleted";
     header("Location: view_students.php");
     return;
@@ -24,10 +24,10 @@ if (!isset($_GET['id'])) {
     return;
 }
 
-$stmt = $pdo->prepare("SELECT id, name, email FROM students WHERE id = :xyz");
-$stmt->execute(array(":xyz" => $_GET['id']));
-$row = $stmt->fetch(PDO::FETCH_ASSOC);
-if ($row === false) {
+$stmt = $pdo->prepare("SELECT id, name, email FROM students WHERE id = :id");
+$stmt->execute(array(":id" => $_GET['id']));
+$student = $stmt->fetch(PDO::FETCH_ASSOC);
+if ($student === false) {
     $_SESSION['error'] = "Bad value for student id";
     header("Location: view_students.php");
     return;
@@ -44,11 +44,12 @@ require_once "header.php";
           <i class="bi bi-trash3"></i>
         </div>
         <h4 class="fw-bold">Delete Student?</h4>
-        <p class="text-muted">You are about to delete <b class="text-dark"><?= htmlentities($row['name']) ?></b><br>
-          <small><?= htmlentities($row['email']) ?></small></p>
+        <p class="text-muted">You are about to delete <b class="text-dark"><?= htmlentities($student['name']) ?></b><br>
+          <small><?= htmlentities($student['email']) ?></small></p>
         <p class="small text-danger">This action can not be undone.</p>
-        <form method="post" onsubmit="return confirm('Are you sure? This can not be undone.');" class="d-flex gap-2 justify-content-center">
-          <input type="hidden" name="id" value="<?= $row['id'] ?>">
+        <form method="post" class="delete-form d-flex gap-2 justify-content-center" data-name="<?= htmlentities($student['name']) ?>">
+          <input type="hidden" name="id" value="<?= $student['id'] ?>">
+          <input type="hidden" name="delete" value="Delete">
           <a href="view_students.php" class="btn btn-light px-4">Cancel</a>
           <button type="submit" name="delete" value="Delete" class="btn btn-danger px-4"><i class="bi bi-trash3"></i> Delete</button>
         </form>

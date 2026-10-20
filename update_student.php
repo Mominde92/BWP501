@@ -33,16 +33,16 @@ if (isset($_POST['name']) && isset($_POST['id'])) {
     }
 
     $sql = "UPDATE students SET name = :name, email = :email, phone = :phone,
-            address = :address, profile_picture = :pic
+            address = :address, profile_picture = :profile_picture
             WHERE id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(array(
-        ':name'    => trim($_POST['name']),
-        ':email'   => trim($_POST['email']),
-        ':phone'   => trim($_POST['phone']),
-        ':address' => trim($_POST['address']),
-        ':pic'     => $picture,
-        ':id'      => $id
+        ':name'            => trim($_POST['name']),
+        ':email'           => trim($_POST['email']),
+        ':phone'           => trim($_POST['phone']),
+        ':address'         => trim($_POST['address']),
+        ':profile_picture' => $picture,
+        ':id'              => $id
     ));
 
     $_SESSION['success'] = "Student updated";
@@ -56,39 +56,39 @@ if (!isset($_GET['id'])) {
     return;
 }
 
-$stmt = $pdo->prepare("SELECT * FROM students WHERE id = :xyz");
-$stmt->execute(array(":xyz" => $_GET['id']));
-$row = $stmt->fetch(PDO::FETCH_ASSOC);
-if ($row === false) {
+$stmt = $pdo->prepare("SELECT * FROM students WHERE id = :id");
+$stmt->execute(array(":id" => $_GET['id']));
+$student = $stmt->fetch(PDO::FETCH_ASSOC);
+if ($student === false) {
     $_SESSION['error'] = "Bad value for student id";
     header("Location: view_students.php");
     return;
 }
 
-$n = htmlentities($row['name']);
-$e = htmlentities($row['email']);
-$p = htmlentities($row['phone']);
-$a = htmlentities($row['address']);
+$name = htmlentities($student['name']);
+$email = htmlentities($student['email']);
+$phone = htmlentities($student['phone']);
+$a = htmlentities($student['address']);
 
 $title = "Edit Student";
 require_once "header.php";
 ?>
-<?php $has_pic = ($row['profile_picture'] != "" && file_exists($row['profile_picture'])); ?>
+<?php $has_pic = ($student['profile_picture'] != "" && file_exists($student['profile_picture'])); ?>
 <div class="row justify-content-center">
   <div class="col-xl-8">
     <div class="card">
       <div class="card-head">
-        <h5><i class="bi bi-pencil-square text-primary me-2"></i>Edit Student #<?= $row['id'] ?></h5>
+        <h5 class="card-title-icon"><i class="bi bi-pencil-square"></i>Edit Student #<?= $student['id'] ?></h5>
         <a href="view_students.php" class="btn btn-sm btn-light"><i class="bi bi-arrow-left"></i> Back</a>
       </div>
-      <div class="card-body">
+      <div class="card-body"><div class="form-box">
       <form method="post" enctype="multipart/form-data" id="studentForm" novalidate>
-        <input type="hidden" name="id" value="<?= $row['id'] ?>">
+        <input type="hidden" name="id" value="<?= $student['id'] ?>">
         <div class="upload-box mb-4">
           <?php if ($has_pic) { ?>
-            <img src="<?= htmlentities($row['profile_picture']) ?>" class="preview-img" id="noPic" alt="current">
+            <img src="<?= htmlentities($student['profile_picture']) ?>" class="preview-img" id="noPic" alt="current">
           <?php } else { ?>
-            <div class="avatar preview-img d-grid fs-2" id="noPic"><?= strtoupper(substr($row['name'], 0, 1)) ?></div>
+            <div class="avatar preview-img d-grid fs-2" id="noPic"><?= strtoupper(substr($student['name'], 0, 1)) ?></div>
           <?php } ?>
           <img id="preview" class="preview-img d-none" alt="preview">
           <div class="flex-grow-1">
@@ -102,7 +102,7 @@ require_once "header.php";
             <label class="form-label">Full Name</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bi bi-person"></i></span>
-              <input type="text" name="name" class="form-control check" value="<?= $n ?>">
+              <input type="text" name="name" class="form-control check" value="<?= $name ?>">
             </div>
             <span class="error-text" id="nameError"></span>
           </div>
@@ -110,7 +110,7 @@ require_once "header.php";
             <label class="form-label">Email</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-              <input type="email" name="email" class="form-control check" value="<?= $e ?>">
+              <input type="email" name="email" class="form-control check" value="<?= $email ?>">
             </div>
             <span class="error-text" id="emailError"></span>
           </div>
@@ -119,7 +119,7 @@ require_once "header.php";
           <label class="form-label">Phone</label>
           <div class="input-group">
             <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-            <input type="text" name="phone" class="form-control check" value="<?= $p ?>">
+            <input type="text" name="phone" class="form-control check" value="<?= $phone ?>">
           </div>
           <span class="error-text" id="phoneError"></span>
         </div>
@@ -133,7 +133,7 @@ require_once "header.php";
           <button type="submit" class="btn btn-primary"><i class="bi bi-check2"></i> Update Student</button>
         </div>
       </form>
-      </div>
+      </div></div>
     </div>
   </div>
 </div>

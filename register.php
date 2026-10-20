@@ -8,12 +8,12 @@ if (isset($_SESSION['user_id'])) {
 }
 
 if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
-    $user  = trim($_POST['username']);
+    $username = trim($_POST['username']);
     $email = trim($_POST['email']);
-    $pass  = $_POST['password'];
-    $pass2 = $_POST['password2'];
+    $password = $_POST['password'];
+    $password_confirm = $_POST['password2'];
 
-    if (strlen($user) < 1 || strlen($email) < 1 || strlen($pass) < 1) {
+    if (strlen($username) < 1 || strlen($email) < 1 || strlen($password) < 1) {
         $_SESSION['error'] = "All fields are required";
         header("Location: register.php");
         return;
@@ -23,29 +23,29 @@ if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['passwor
         header("Location: register.php");
         return;
     }
-    if (strlen($pass) < 6) {
+    if (strlen($password) < 6) {
         $_SESSION['error'] = "Password must be at least 6 characters";
         header("Location: register.php");
         return;
     }
-    if ($pass != $pass2) {
+    if ($password != $password_confirm) {
         $_SESSION['error'] = "Passwords do not match";
         header("Location: register.php");
         return;
     }
 
-    $stmt = $pdo->prepare("SELECT id FROM users WHERE username = :u OR email = :e");
-    $stmt->execute(array(':u' => $user, ':e' => $email));
+    $stmt = $pdo->prepare("SELECT id FROM users WHERE username = :username OR email = :email");
+    $stmt->execute(array(':username' => $username, ':email' => $email));
     if ($stmt->fetch(PDO::FETCH_ASSOC) !== false) {
         $_SESSION['error'] = "Username or email already exists";
         header("Location: register.php");
         return;
     }
 
-    $hash = password_hash($pass, PASSWORD_DEFAULT);
+    $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-    $stmt = $pdo->prepare("INSERT INTO users (username, email, password) VALUES (:u, :e, :p)");
-    $stmt->execute(array(':u' => $user, ':e' => $email, ':p' => $hash));
+    $stmt = $pdo->prepare("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)");
+    $stmt->execute(array(':username' => $username, ':email' => $email, ':password' => $password_hash));
 
     $_SESSION['success'] = "Account created, you can login now";
     header("Location: login.php");

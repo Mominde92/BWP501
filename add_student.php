@@ -24,14 +24,14 @@ if (isset($_POST['name']) && isset($_POST['email'])) {
     }
 
     $sql = "INSERT INTO students (name, email, phone, address, profile_picture)
-            VALUES (:name, :email, :phone, :address, :pic)";
+            VALUES (:name, :email, :phone, :address, :profile_picture)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(array(
-        ':name'    => trim($_POST['name']),
-        ':email'   => trim($_POST['email']),
-        ':phone'   => trim($_POST['phone']),
-        ':address' => trim($_POST['address']),
-        ':pic'     => $picture
+        ':name'            => trim($_POST['name']),
+        ':email'           => trim($_POST['email']),
+        ':phone'           => trim($_POST['phone']),
+        ':address'         => trim($_POST['address']),
+        ':profile_picture' => $picture
     ));
 
     $_SESSION['success'] = "Student added successfully (ID: " . $pdo->lastInsertId() . ")";
@@ -46,10 +46,10 @@ require_once "header.php";
   <div class="col-xl-8">
     <div class="card">
       <div class="card-head">
-        <h5><i class="bi bi-person-plus text-primary me-2"></i>New Student Information</h5>
+        <h5 class="card-title-icon"><i class="bi bi-person-plus"></i>New Student Information</h5>
         <a href="view_students.php" class="btn btn-sm btn-light"><i class="bi bi-arrow-left"></i> Back</a>
       </div>
-      <div class="card-body">
+      <div class="card-body"><div class="form-box">
       <form method="post" enctype="multipart/form-data" id="studentForm" novalidate>
         <div class="upload-box mb-4">
           <div class="avatar preview-img d-grid" id="noPic"><i class="bi bi-camera fs-3"></i></div>
@@ -96,7 +96,7 @@ require_once "header.php";
           <button type="submit" class="btn btn-primary"><i class="bi bi-check2"></i> Save Student</button>
         </div>
       </form>
-      </div>
+      </div></div>
     </div>
   </div>
 </div>

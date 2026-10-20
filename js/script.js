@@ -85,3 +85,39 @@ if (registerForm) {
         }
     });
 }
+
+var clock = document.getElementById("clock");
+if (clock) {
+    setInterval(function () {
+        clock.innerHTML = new Date().toLocaleTimeString("en-US");
+    }, 1000);
+}
+
+var deleteForms = document.querySelectorAll(".delete-form");
+for (var i = 0; i < deleteForms.length; i++) {
+    deleteForms[i].addEventListener("submit", function (event) {
+        event.preventDefault();
+        var form = this;
+        Swal.fire({
+            title: "Delete Student?",
+            html: "You are about to delete <b>" + escapeHtml(form.dataset.name) + "</b><br>This action can not be undone.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete",
+            cancelButtonText: "Cancel",
+            confirmButtonColor: "#f5365c",
+            cancelButtonColor: "#8898aa",
+            reverseButtons: true
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    });
+}
+
+function escapeHtml(text) {
+    var div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+}

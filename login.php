@@ -9,23 +9,23 @@ if (isset($_SESSION['user_id'])) {
 
 if (isset($_POST['login']) && isset($_POST['password'])) {
     $login = trim($_POST['login']);
-    $pass  = $_POST['password'];
+    $password = $_POST['password'];
 
-    if (strlen($login) < 1 || strlen($pass) < 1) {
+    if (strlen($login) < 1 || strlen($password) < 1) {
         $_SESSION['error'] = "Username/email and password are required";
         header("Location: login.php");
         return;
     }
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :l OR email = :l2");
-    $stmt->execute(array(':l' => $login, ':l2' => $login));
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :login_username OR email = :login_email");
+    $stmt->execute(array(':login_username' => $login, ':login_email' => $login));
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($row !== false && password_verify($pass, $row['password'])) {
+    if ($user !== false && password_verify($password, $user['password'])) {
         session_regenerate_id(true);
-        $_SESSION['user_id']  = $row['id'];
-        $_SESSION['username'] = $row['username'];
-        $_SESSION['success']  = "Welcome back " . $row['username'];
+        $_SESSION['user_id']  = $user['id'];
+        $_SESSION['username'] = $user['username'];
+        $_SESSION['success']  = "Welcome back " . $user['username'];
         header("Location: index.php");
         return;
     } else {

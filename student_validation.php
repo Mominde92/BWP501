@@ -19,8 +19,8 @@ function validate_student($pdo, $data, $id = 0)
     } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = "Invalid email format";
     } else {
-        $stmt = $pdo->prepare("SELECT id FROM students WHERE email = :e AND id != :id");
-        $stmt->execute(array(':e' => $email, ':id' => $id));
+        $stmt = $pdo->prepare("SELECT id FROM students WHERE email = :email AND id != :id");
+        $stmt->execute(array(':email' => $email, ':id' => $id));
         if ($stmt->fetch(PDO::FETCH_ASSOC) !== false) {
             $errors['email'] = "This email is already used by another student";
         }
